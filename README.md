@@ -25,28 +25,4 @@ Everything lives in one file:
 
 Just open the HTML file in any browser — no server or dependencies needed. All fonts load from Google Fonts and the chart library loads from a CDN.
 
-## Deploying to Vercel
 
-Vercel can serve a plain HTML file with zero configuration.
-
-### Steps
-
-1. Make sure the file is renamed without the space and parentheses (Vercel handles it, but clean names are safer):
-
-   ```bash
-   git mv "ai_emotional_support_takeaways (1).html" index.html
-   git commit -m "rename to index.html for Vercel"
-   git push
-   ```
-
-2. Go to [vercel.com](https://vercel.com) and sign in with your GitHub account.
-
-3. Click **Add New → Project**, then import the `ai_emotional_support` repository.
-
-4. Leave all settings as default — Vercel will detect it as a static site automatically.
-
-5. Click **Deploy**. Your report will be live at a URL like `https://ai-emotional-support.vercel.app`.
-
-### Updating the site
-
-Any future `git push` to `main` will automatically trigger a redeployment on Vercel.
