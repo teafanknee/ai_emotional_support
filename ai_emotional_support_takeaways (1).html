@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI for Emotional Support — Survey Takeaways</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --ink: #1a1a18;
+    --ink-muted: #5a5a52;
+    --ink-faint: #9a9a90;
+    --paper: #f7f5ef;
+    --paper-warm: #eeeae0;
+    --accent: #c85a2a;
+    --accent-light: #f0d5c8;
+    --teal: #1d6e56;
+    --teal-light: #d0ebe3;
+    --blue: #2860a0;
+    --blue-light: #d5e5f5;
+    --rule: rgba(26,26,24,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 2.5rem 5rem;
+  }
+
+  /* Header */
+  .header {
+    border-top: 3px solid var(--ink);
+    padding-top: 2rem;
+    margin-bottom: 3rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 2rem;
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 0.5rem;
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.8rem;
+    line-height: 1.15;
+    color: var(--ink);
+    font-weight: 400;
+  }
+  .header h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .header-meta {
+    text-align: right;
+    font-size: 12px;
+    color: var(--ink-faint);
+    line-height: 1.8;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--rule);
+    margin: 2.5rem 0;
+  }
+
+  /* Section labels */
+  .section-label {
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1.25rem;
+  }
+
+  /* Metric cards */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 3rem;
+  }
+  .metric {
+    background: var(--paper);
+    padding: 1.25rem 1rem;
+  }
+  .metric-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .metric-num sup {
+    font-size: 1.1rem;
+    vertical-align: super;
+  }
+  .metric-label {
+    font-size: 12px;
+    color: var(--ink-muted);
+    line-height: 1.4;
+  }
+
+  /* Chart grid */
+  .chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  .chart-box {}
+  .chart-box h3 {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+  }
+  .chart-wrap {
+    position: relative;
+    height: 220px;
+  }
+
+  /* Rating bars */
+  .ratings { margin-bottom: 3rem; }
+  .rating-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .rating-label {
+    width: 200px;
+    font-size: 12.5px;
+    color: var(--ink-muted);
+    flex-shrink: 0;
+  }
+  .bar-track {
+    flex: 1;
+    height: 6px;
+    background: var(--paper-warm);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .bar-fill { height: 100%; border-radius: 3px; }
+  .bar-val {
+    width: 32px;
+    text-align: right;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  /* Quote cards */
+  .quotes-section { margin-bottom: 3rem; }
+  .quotes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .quote-card {
+    background: var(--paper-warm);
+    border-radius: 4px;
+    padding: 1rem 1.1rem;
+  }
+  .quote-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+  }
+  .quote-tag.blue { background: var(--blue-light); color: var(--blue); }
+  .quote-tag.teal { background: var(--teal-light); color: var(--teal); }
+  .quote-card p {
+    font-size: 13px;
+    color: var(--ink);
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  /* Key insight callout */
+  .insight {
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.5rem;
+    background: var(--accent-light);
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 3rem;
+  }
+  .insight p {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    color: var(--ink);
+    line-height: 1.55;
+    font-style: italic;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 10px;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+  }
+  .legend span { display: flex; align-items: center; gap: 5px; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+
+  /* Footer */
+  .footer {
+    border-top: 1px solid var(--rule);
+    padding-top: 1.25rem;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 640px) {
+    .page { padding: 1.5rem 1.25rem 3rem; }
+    .header { grid-template-columns: 1fr; }
+    .header h1 { font-size: 2rem; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .chart-grid { grid-template-columns: 1fr; }
+    .quotes-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div>
+      <div class="header-eyebrow">Survey Analysis · April 2026</div>
+      <h1>How people use AI<br>for <em>emotional support</em></h1>
+    </div>
+    <div class="header-meta">
+      n = 7 respondents<br>
+      Collected via Typeform<br>
+      April 6, 2026
+    </div>
+  </div>
+
+  <div class="section-label">At a glance</div>
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-num">7</div>
+      <div class="metric-label">Total survey responses</div>
+    </div>
+    <div class="metric">
+      <div class="metric-num">57<sup>%</sup></div>
+      <div class="metric-label">Use AI for personal topics at least occasionally</div>
+    </div>
+    <div class="metric">
+      <div class="metric-num">3.3</div>
+      <div class="metric-label">Avg. AI validation score (out of 5)</div>
+    </div>
+    <div class="metric">
+      <div class="metric-num">43<sup>%</sup></div>
+      <div class="metric-label">Open to a follow-up conversation</div>
+    </div>
+  </div>
+
+  <div class="insight">
+    <p>People turn to AI not because it feels deeply understood — it scores only 2.6/5 on emotional resonance — but because it removes the social cost of vulnerability: no burden, no judgment, no awkwardness.</p>
+  </div>
+
+  <div class="section-label">Usage patterns</div>
+  <div class="chart-grid">
+    <div class="chart-box">
+      <h3>How often do people have personal AI conversations?</h3>
+      <div class="legend">
+        <span><span class="legend-dot" style="background:#2860a0"></span>Rarely / Never (4)</span>
+        <span><span class="legend-dot" style="background:#1d6e56"></span>A few times a month (2)</span>
+        <span><span class="legend-dot" style="background:#c85a2a"></span>Daily or more (1)</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="freqChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-box">
+      <h3>What do people ask AI for help with?</h3>
+      <div class="legend">
+        <span><span class="legend-dot" style="background:#2860a0"></span>Respondents</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="topicsChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Emotional experience ratings (avg. out of 5)</div>
+  <div class="ratings">
+    <div class="rating-row">
+      <div class="rating-label">AI validates / agrees with me</div>
+      <div class="bar-track"><div class="bar-fill" style="width:66%;background:#2860a0;"></div></div>
+      <div class="bar-val">3.3</div>
+    </div>
+    <div class="rating-row">
+      <div class="rating-label">AI offers useful advice</div>
+      <div class="bar-track"><div class="bar-fill" style="width:76%;background:#1d6e56;"></div></div>
+      <div class="bar-val">3.8</div>
+    </div>
+    <div class="rating-row">
+      <div class="rating-label">Advice feels emotionally good</div>
+      <div class="bar-track"><div class="bar-fill" style="width:52%;background:#c85a2a;"></div></div>
+      <div class="bar-val">2.6</div>
+    </div>
+    <div class="rating-row">
+      <div class="rating-label">Feels heard / understood</div>
+      <div class="bar-track"><div class="bar-fill" style="width:52%;background:#9a4a7a;"></div></div>
+      <div class="bar-val">2.6</div>
+    </div>
+    <div class="rating-row">
+      <div class="rating-label">AI remembers past conversations</div>
+      <div class="bar-track"><div class="bar-fill" style="width:52%;background:#6050a0;"></div></div>
+      <div class="bar-val">2.6</div>
+    </div>
+    <div class="rating-row">
+      <div class="rating-label">AI matches my talking style</div>
+      <div class="bar-track"><div class="bar-fill" style="width:48%;background:#707068;"></div></div>
+      <div class="bar-val">2.4</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="quotes-section">
+    <div class="section-label">Why people open up to AI (in their own words)</div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <div class="quote-tag blue">No burden</div>
+        <p>"You're not burdening the AI like you would a friend or therapist — they aren't worried for you based on what you say."</p>
+      </div>
+      <div class="quote-card">
+        <div class="quote-tag blue">Privacy</div>
+        <p>"I feel free to say anything to AI since I feel private. The conversation can start whenever."</p>
+      </div>
+      <div class="quote-card">
+        <div class="quote-tag blue">No judgment</div>
+        <p>"I know it doesn't care or have actual emotional reactions — it's literally a bot. If I feel something, it won't actually judge me."</p>
+      </div>
+      <div class="quote-card">
+        <div class="quote-tag blue">Accessibility</div>
+        <p>"It's more free (money-wise). I assume that's why people turn to AI instead of therapists."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="quotes-section">
+    <div class="section-label">What feels different vs. a friend or therapist?</div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <div class="quote-tag teal">No shared context</div>
+        <p>"I use it only for hyper-specific scenarios where I want advice and feel awkward bringing it up to people I know."</p>
+      </div>
+      <div class="quote-card">
+        <div class="quote-tag teal">No relationship</div>
+        <p>"I don't talk to AI for personal things — there's no relationship context."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>AI for Emotional Support — Survey Takeaways</span>
+    <span>n = 7 · April 2026 · Typeform export</span>
+  </div>
+
+</div>
+
+<script>
+new Chart(document.getElementById('freqChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Rarely / Never', 'A few times a month', 'Daily or more'],
+    datasets: [{
+      data: [4, 2, 1],
+      backgroundColor: ['#2860a0', '#1d6e56', '#c85a2a'],
+      borderWidth: 2,
+      borderColor: '#f7f5ef',
+      hoverOffset: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '60%',
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: (c) => ` ${c.label}: ${c.raw} people` } }
+    }
+  }
+});
+
+new Chart(document.getElementById('topicsChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Decision-making', 'Social advice', 'Personal problems', 'Venting', 'Other'],
+    datasets: [{
+      data: [5, 3, 2, 1, 2],
+      backgroundColor: '#2860a0',
+      borderRadius: 3,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: {
+        ticks: { stepSize: 1, font: { size: 11 }, color: '#9a9a90' },
+        grid: { color: 'rgba(26,26,24,0.07)' },
+        max: 6
+      },
+      y: {
+        ticks: { font: { size: 11 }, color: '#5a5a52' },
+        grid: { display: false }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
